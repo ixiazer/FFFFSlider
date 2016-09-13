@@ -10,6 +10,7 @@
 #import "FFCollectionSliderViewController.h"
 #import "FFPageHomeViewController.h"
 #import "FFSliderViewController.h"
+#import "FFMixScrollViewViewController.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *tableList;
@@ -30,7 +31,7 @@
 
 #pragma mark -- UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 3;
+    return 4;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -43,7 +44,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     
-    NSArray *arr = @[@"UICollectionView",@"UIScrollView",@"UIPageViewController"];
+    NSArray *arr = @[@"UICollectionView",@"UIScrollView",@"UIPageViewController",@"Mix UIScrollView"];
     cell.textLabel.text = arr[indexPath.row];
     
     return cell;
@@ -60,6 +61,9 @@
     } else if (indexPath.row == 2) {
         FFPageHomeViewController *pageVC = [[FFPageHomeViewController alloc] init];
         [self.navigationController pushViewController:pageVC animated:YES];
+    } else if (indexPath.row == 3) {
+        FFMixScrollViewViewController *sliderVC = [[FFMixScrollViewViewController alloc] init];
+        [self.navigationController pushViewController:sliderVC animated:YES];
     }
 }
 

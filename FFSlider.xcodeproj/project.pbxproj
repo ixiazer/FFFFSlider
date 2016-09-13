@@ -11,6 +11,8 @@
 		171E00911D8672AE00C53CF4 /* FFPageHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 171E00901D8672AE00C53CF4 /* FFPageHomeViewController.m */; };
 		171E00971D867F4500C53CF4 /* FFHomeSilderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 171E00961D867F4500C53CF4 /* FFHomeSilderViewController.m */; };
 		171E009A1D867F7900C53CF4 /* FFSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 171E00991D867F7900C53CF4 /* FFSliderViewController.m */; };
+		17AEC09B1D87CD27007C22ED /* FFMixSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17AEC09A1D87CD27007C22ED /* FFMixSliderViewController.m */; };
+		17AEC09E1D87CEC9007C22ED /* FFMixScrollViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17AEC09D1D87CEC9007C22ED /* FFMixScrollViewViewController.m */; };
 		17D541561D6FE9E300B5E785 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D541551D6FE9E300B5E785 /* main.m */; };
 		17D541591D6FE9E300B5E785 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D541581D6FE9E300B5E785 /* AppDelegate.m */; };
 		17D5415C1D6FE9E300B5E785 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D5415B1D6FE9E300B5E785 /* ViewController.m */; };
@@ -52,6 +54,10 @@
 		171E00961D867F4500C53CF4 /* FFHomeSilderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFHomeSilderViewController.m; sourceTree = "<group>"; };
 		171E00981D867F7900C53CF4 /* FFSliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFSliderViewController.h; sourceTree = "<group>"; };
 		171E00991D867F7900C53CF4 /* FFSliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFSliderViewController.m; sourceTree = "<group>"; };
+		17AEC0991D87CD27007C22ED /* FFMixSliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMixSliderViewController.h; sourceTree = "<group>"; };
+		17AEC09A1D87CD27007C22ED /* FFMixSliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMixSliderViewController.m; sourceTree = "<group>"; };
+		17AEC09C1D87CEC9007C22ED /* FFMixScrollViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFMixScrollViewViewController.h; sourceTree = "<group>"; };
+		17AEC09D1D87CEC9007C22ED /* FFMixScrollViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFMixScrollViewViewController.m; sourceTree = "<group>"; };
 		17D541511D6FE9E300B5E785 /* FFSlider.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FFSlider.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17D541551D6FE9E300B5E785 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		17D541571D6FE9E300B5E785 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -141,6 +147,8 @@
 				171E00901D8672AE00C53CF4 /* FFPageHomeViewController.m */,
 				171E00981D867F7900C53CF4 /* FFSliderViewController.h */,
 				171E00991D867F7900C53CF4 /* FFSliderViewController.m */,
+				17AEC09C1D87CEC9007C22ED /* FFMixScrollViewViewController.h */,
+				17AEC09D1D87CEC9007C22ED /* FFMixScrollViewViewController.m */,
 				17D5415D1D6FE9E300B5E785 /* Main.storyboard */,
 				17D541601D6FE9E300B5E785 /* Assets.xcassets */,
 				17D541621D6FE9E300B5E785 /* LaunchScreen.storyboard */,
@@ -185,6 +193,8 @@
 				171E008D1D86713F00C53CF4 /* FFPageViewController.m */,
 				171E00951D867F4500C53CF4 /* FFHomeSilderViewController.h */,
 				171E00961D867F4500C53CF4 /* FFHomeSilderViewController.m */,
+				17AEC0991D87CD27007C22ED /* FFMixSliderViewController.h */,
+				17AEC09A1D87CD27007C22ED /* FFMixSliderViewController.m */,
 				17D5419E1D70157500B5E785 /* FFHomeSliderNavView.h */,
 				17D5419F1D70157500B5E785 /* FFHomeSliderNavView.m */,
 				17D541901D7008AF00B5E785 /* Model */,
@@ -334,6 +344,7 @@
 				17D5415C1D6FE9E300B5E785 /* ViewController.m in Sources */,
 				171E009A1D867F7900C53CF4 /* FFSliderViewController.m in Sources */,
 				17D5419D1D700F4F00B5E785 /* FFDetailViewController.m in Sources */,
+				17AEC09E1D87CEC9007C22ED /* FFMixScrollViewViewController.m in Sources */,
 				171E00911D8672AE00C53CF4 /* FFPageHomeViewController.m in Sources */,
 				17D541971D7008AF00B5E785 /* FFSliderModel.m in Sources */,
 				17D541A31D7016E900B5E785 /* FFCollectionSliderViewController.m in Sources */,
@@ -341,6 +352,7 @@
 				171E008E1D86713F00C53CF4 /* FFPageViewController.m in Sources */,
 				17D541931D7008AF00B5E785 /* FFHomeCollectionView.m in Sources */,
 				17D541591D6FE9E300B5E785 /* AppDelegate.m in Sources */,
+				17AEC09B1D87CD27007C22ED /* FFMixSliderViewController.m in Sources */,
 				17D541561D6FE9E300B5E785 /* main.m in Sources */,
 				17D541A01D70157500B5E785 /* FFHomeSliderNavView.m in Sources */,
 			);

@@ -21,12 +21,12 @@ typedef NS_ENUM(NSInteger, FFMixSliderUIInitType) {
     FFMixSliderUIInitTypeForBackward = 1 << 2, // 向后滑动
 };
 
-@interface FFMixSliderViewController : FFRootViewController
-@property (nonatomic, strong) FFRootViewController *currentSingleVC; // 当前UIViewController
+@interface FFMixSliderViewController : UIViewController
+@property (nonatomic, strong) UIViewController *currentSingleVC; // 当前UIViewController
 
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, assign) FFMixSliderCachePolicy cachePolicy; // 缓存策略
 
-- (void)configSliderView:(NSArray *)sliderInfoArr currentIndex:(NSInteger)currentIndex vcClassNameArr:(NSArray *)vcClassNameArr parentVC:(FFRootViewController *)parentVC sliderBlock:(void(^)(id vcData, NSInteger currentIndex, id data))sliderBlock;
+- (void)configSliderView:(NSArray *)sliderInfoArr currentIndex:(NSInteger)currentIndex parentVC:(UIViewController *)parentVC sliderBlock:(void(^)(id vcData, NSInteger currentIndex, id data))sliderBlock;
 
 @end

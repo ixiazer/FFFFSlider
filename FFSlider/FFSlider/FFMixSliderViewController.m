@@ -7,14 +7,19 @@
 //
 
 #import "FFMixSliderViewController.h"
-#import "UIView+FF.h"
-#import "FFHomeNavModel.h"
+#import "FFSliderModel.h"
+
+// 屏幕宽度
+#define FFScreenWidth [UIScreen mainScreen].bounds.size.width
+// 屏幕高度
+#define FFScreenHeight [UIScreen mainScreen].bounds.size.height
+
 
 @interface FFMixSliderViewController () <UIScrollViewDelegate>
 // sliderView容器
 @property (nonatomic, strong) UIScrollView *sliderScrollView; // UIScrollView容器
 @property (nonatomic, strong) NSMutableArray *scrollviewSliderInfoArr; // UIScrollView容器中视图的数据对象
-@property (nonatomic, strong) FFHomeNavModel *currentSliderModel; // 当前UIViewController model
+@property (nonatomic, strong) FFSliderModel *currentSliderModel; // 当前UIViewController model
 // 缓存池数据
 @property (nonatomic, strong) NSCache *sliderCache; // 缓存池
 // 收到内存警告的次数
@@ -28,11 +33,10 @@
 // 回掉block
 @property (nonatomic, copy) void(^sliderBlock)(id vcData, NSInteger currentIndex, id data); // 当UIScrollView滚动后，通知父视图
 // 滚动viewcontroller class name
-@property (nonatomic, strong) NSArray *vcClassNameArr;
 @property (nonatomic, assign) CGRect selfFrame;
 
 // 父viewcontroller
-@property (nonatomic, strong) FFRootViewController *mixSliderParentVC;
+@property (nonatomic, strong) UIViewController *mixSliderParentVC;
 
 
 @end
@@ -53,7 +57,7 @@
 }
 
 - (void)dealloc {
-    FFLog(@"FFSliderViewController---dealloc");
+    NSLog(@"FFSliderViewController---dealloc");
 }
 
 //- (void)wakeFromBackGround:(NSNotificationCenter *)notify {
@@ -67,9 +71,8 @@
     self.scrollviewSliderInfoArr = [[NSMutableArray alloc] init];
 }
 
-- (void)configSliderView:(NSArray *)sliderInfoArr currentIndex:(NSInteger)currentIndex vcClassNameArr:(NSArray *)vcClassNameArr parentVC:(FFRootViewController *)parentVC sliderBlock:(void(^)(id vcData, NSInteger currentIndex, id data))sliderBlock {
+- (void)configSliderView:(NSArray *)sliderInfoArr currentIndex:(NSInteger)currentIndex parentVC:(UIViewController *)parentVC sliderBlock:(void(^)(id vcData, NSInteger currentIndex, id data))sliderBlock {
     self.sliderBlock = sliderBlock;
-    self.vcClassNameArr = vcClassNameArr;
     self.selfFrame = self.view.frame;
     self.mixSliderParentVC = parentVC;
     
@@ -94,23 +97,23 @@
 }
 
 - (id)getSingleVC:(NSInteger)index {
-    FFHomeNavModel *model = (FFHomeNavModel *)[self.sliderInfoArr objectAtIndex:index];
+    FFSliderModel *model = (FFSliderModel *)[self.sliderInfoArr objectAtIndex:index];
     
     id singleVC;
     if (index == 0) {
-        NSString *keyStr = [NSString stringWithFormat:@"mixIndex%@",@(model.navIndex)];
+        NSString *keyStr = [NSString stringWithFormat:@"mixIndex%@",@(model.sliderIndex)];
         id tempVC = [self.sliderCache objectForKey:keyStr];
         if (tempVC) {
             singleVC = tempVC;
         } else {
-            Class someClass = NSClassFromString(self.vcClassNameArr[index]);
+            Class someClass = NSClassFromString(model.classNameStr);
             singleVC = [[someClass alloc] init];
             
-            NSString *elseKeyStr = [NSString stringWithFormat:@"mixIndex%@",@(model.navIndex)];
+            NSString *elseKeyStr = [NSString stringWithFormat:@"mixIndex%@",@(model.sliderIndex)];
             [self.sliderCache setObject:singleVC forKey:elseKeyStr];
         }
     } else {
-        Class someClass = NSClassFromString(self.vcClassNameArr[index]);
+        Class someClass = NSClassFromString(model.classNameStr);
         singleVC = [[someClass alloc] init];
     }
     
@@ -134,20 +137,16 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [this readyForSliderViewData:type];
     });
-
-//    __weak typeof(self) this = self;
-//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//        [this readyForSliderViewData:type];
-//    });
 }
+
 #pragma mark - 准备绘制UIScrollView 的数据
 - (void)readyForSliderViewData:(FFMixSliderUIInitType)type {
     NSInteger scrollViewCurrentIndex;
     // 先删除废弃的VC
     if (type == FFMixSliderUIInitTypeForForward) {
         // 移除不显示视图
-        FFHomeNavModel *model = (FFHomeNavModel *)[self.scrollviewSliderInfoArr lastObject];
-        FFRootViewController *singleVC = (FFRootViewController *)[self getSingleVC:model.navIndex];
+        FFSliderModel *model = (FFSliderModel *)[self.scrollviewSliderInfoArr lastObject];
+        UIViewController *singleVC = (UIViewController *)[self getSingleVC:model.sliderIndex];
         [singleVC.view removeFromSuperview];
         [singleVC removeFromParentViewController];
         singleVC = nil;
@@ -160,7 +159,7 @@
         } else {
             // 其他
             [self.scrollviewSliderInfoArr removeLastObject];
-            FFHomeNavModel *firstModel = (FFHomeNavModel *)[self.sliderInfoArr objectAtIndex:self.currentIndex-2];
+            UIViewController *firstModel = (UIViewController *)[self.sliderInfoArr objectAtIndex:self.currentIndex-2];
             NSMutableArray *mutTemVC = [[NSMutableArray alloc] init];
             // 新的视图对象第一位
             [mutTemVC addObject:firstModel];
@@ -173,8 +172,8 @@
         // 当前视图在所有数组中定位
         scrollViewCurrentIndex = 1;
     } else if (type == FFMixSliderUIInitTypeForBackward) {
-        FFHomeNavModel *model = (FFHomeNavModel *)[self.scrollviewSliderInfoArr firstObject];
-        FFRootViewController *singleVC = (FFRootViewController *)[self getSingleVC:model.navIndex];
+        FFSliderModel *model = (FFSliderModel *)[self.scrollviewSliderInfoArr firstObject];
+        UIViewController *singleVC = (UIViewController *)[self getSingleVC:model.sliderIndex];
         [singleVC.view removeFromSuperview];
         [singleVC removeFromParentViewController];
         singleVC = nil;
@@ -190,7 +189,7 @@
             // 新的视图对象第一、二位
             [mutTemVC addObjectsFromArray:temArr];
             // 原视图对象第三位
-            FFHomeNavModel *lastModel = (FFHomeNavModel *)[self.sliderInfoArr objectAtIndex:self.currentIndex+2];
+            FFSliderModel *lastModel = (FFSliderModel *)[self.sliderInfoArr objectAtIndex:self.currentIndex+2];
             [mutTemVC addObject:lastModel];
             self.scrollviewSliderInfoArr = [NSMutableArray arrayWithArray:mutTemVC];
         }
@@ -202,9 +201,9 @@
         if (self.sliderInfoArr.count <= 3) {
             self.scrollviewSliderInfoArr = [[NSMutableArray alloc] initWithArray:self.sliderInfoArr];
             scrollViewCurrentIndex = self.currentIndex;
-            self.sliderScrollView.contentSize = CGSizeMake(FFScreenWidth*self.sliderInfoArr.count, self.view.height);
+            self.sliderScrollView.contentSize = CGSizeMake(FFScreenWidth*self.sliderInfoArr.count, self.view.frame.size.height);
         } else {
-            self.sliderScrollView.contentSize = CGSizeMake(FFScreenWidth*3, self.view.height);
+            self.sliderScrollView.contentSize = CGSizeMake(FFScreenWidth*3, self.view.frame.size.height);
 
             if (self.currentIndex <= 1) {
                 self.scrollviewSliderInfoArr = [[NSMutableArray alloc] initWithArray:[self.sliderInfoArr subarrayWithRange:NSMakeRange(0, 3)]];
@@ -230,7 +229,7 @@
 - (void)drawSliderView:(NSInteger)scrollViewCurrentIndex {
     if (self.currentVCArr.count > 0) {
         for (NSInteger i = 0; i < self.currentVCArr.count; i++) {
-            FFRootViewController *vc = (FFRootViewController *)self.currentVCArr[i];
+            UIViewController *vc = (UIViewController *)self.currentVCArr[i];
             [vc.view removeFromSuperview];
             vc = nil;
         }
@@ -240,25 +239,25 @@
     self.currentVCIndex = scrollViewCurrentIndex;
 
     for (NSInteger i = 0; i < self.scrollviewSliderInfoArr.count; i++) {
-        FFHomeNavModel *model = (FFHomeNavModel *)self.scrollviewSliderInfoArr[i];
-        FFRootViewController *singleVC = (FFRootViewController *)[self getSingleVC:model.navIndex];
+        FFSliderModel *model = (FFSliderModel *)self.scrollviewSliderInfoArr[i];
+        UIViewController *singleVC = (UIViewController *)[self getSingleVC:model.sliderIndex];
         singleVC.view.frame = CGRectMake(FFScreenWidth*i, 0, FFScreenWidth, self.selfFrame.size.height);
         
         [self.currentVCArr addObject:singleVC];
-        FFLog(@"singleVC.view.frame--->>%.2f",singleVC.view.frame.size.height);
+        NSLog(@"singleVC.view.frame--->>%.2f",singleVC.view.frame.size.height);
         [self.sliderScrollView addSubview:singleVC.view];
         
         if (i == scrollViewCurrentIndex) {
             self.currentSingleVC = singleVC;
             self.currentSliderModel = model;
-            singleVC.parentVC = self.mixSliderParentVC;
+//            singleVC.parentVC = self.mixSliderParentVC;
         } else {
-            singleVC.parentVC = nil;
+//            singleVC.parentVC = nil;
         }
     }
     
     [self.sliderScrollView setContentOffset:CGPointMake(FFScreenWidth*scrollViewCurrentIndex, 0)];
-    self.currentIndex = self.currentSliderModel.navIndex;
+    self.currentIndex = self.currentSliderModel.sliderIndex;
 }
 
 #pragma mark - set method
@@ -304,8 +303,8 @@
     // scrollView 位置
     NSInteger scrollViewIndex = offsetX/FFScreenWidth;
 
-    FFHomeNavModel *model = (FFHomeNavModel *)[self.scrollviewSliderInfoArr firstObject];
-    if (scrollViewIndex == 0 && model.navIndex == 0) {
+    FFSliderModel *model = (FFSliderModel *)[self.scrollviewSliderInfoArr firstObject];
+    if (scrollViewIndex == 0 && model.sliderIndex == 0) {
         return;
     }
     
@@ -326,7 +325,7 @@
             [self resetScrollViewCon:FFMixSliderUIInitTypeForNormal];
         } else if (self.currentIndex == self.sliderInfoArr.count-1 && scrollViewIndex == 2) {
             self.currentSingleVC = nil;
-            self.currentIndex = self.currentSliderModel.navIndex;
+            self.currentIndex = self.currentSliderModel.sliderIndex;
             [self resetScrollViewCon:FFMixSliderUIInitTypeForNormal];
         } else {
             if (scrollViewIndex == 0) {
@@ -345,22 +344,15 @@
 }
 
 #pragma mark - get method
-- (NSArray *)vcClassNameArr {
-    if (!_vcClassNameArr) {
-        _vcClassNameArr = [[NSArray alloc] init];
-    }
-    return _vcClassNameArr;
-}
-
 - (UIScrollView *)sliderScrollView {
     if (!_sliderScrollView) {
-        _sliderScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, FFScreenWidth, self.view.height)];
+        _sliderScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, FFScreenWidth, self.view.frame.size.height)];
         _sliderScrollView.backgroundColor = [UIColor whiteColor];
         _sliderScrollView.delegate = self;
         _sliderScrollView.pagingEnabled = YES;
         _sliderScrollView.showsHorizontalScrollIndicator = NO;
         _sliderScrollView.showsVerticalScrollIndicator = NO;
-        _sliderScrollView.contentSize = CGSizeMake(FFScreenWidth*3, self.view.height);
+        _sliderScrollView.contentSize = CGSizeMake(FFScreenWidth*3, self.view.frame.size.height);
     }
     return _sliderScrollView;
 }

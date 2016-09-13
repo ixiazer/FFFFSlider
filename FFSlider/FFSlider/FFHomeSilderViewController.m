@@ -135,7 +135,7 @@
 }
 
 - (void)configVCRequest:(NSInteger)index vc:(UIViewController *)vc {
-    FFDetailViewController *recommendVC = (FFDetailViewController *)vc;
+//    FFDetailViewController *recommendVC = (FFDetailViewController *)vc;
 }
 
 - (NSArray *)getWillAddPageIndexArr {
