@@ -27,6 +27,8 @@
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
 
+    self.title = @"FFPageViewController";
+    
     self.view.backgroundColor = [UIColor whiteColor];
     [self switchToViewControllerAtIndex:0];
 }

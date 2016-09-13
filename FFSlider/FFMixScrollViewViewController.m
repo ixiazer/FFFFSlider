@@ -30,6 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.automaticallyAdjustsScrollViewInsets = NO;
+    self.title = @"Mix-UIScrollView";
     
     self.homeNavArr = [NSMutableArray new];
     for (NSInteger i = 0; i < 10; i++) {

@@ -16,7 +16,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.title = @"Detail ViewController";
+
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.detailLab];
     self.detailLab.text = self.detailTitle;
